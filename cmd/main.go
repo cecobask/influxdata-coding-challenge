@@ -18,6 +18,7 @@ package main
 
 import (
 	"flag"
+	"github.com/cannonpalms/email-controller-template/pkg/fakeemail"
 	"os"
 
 	// Import all Kubernetes client auth plugins (e.g. Azure, GCP, OIDC, etc.)
@@ -90,8 +91,9 @@ func main() {
 	}
 
 	if err = (&controller.EmailRequestReconciler{
-		Client: mgr.GetClient(),
-		Scheme: mgr.GetScheme(),
+		Client:       mgr.GetClient(),
+		Scheme:       mgr.GetScheme(),
+		EmailService: fakeemail.DefaultEmailService(),
 	}).SetupWithManager(mgr); err != nil {
 		setupLog.Error(err, "unable to create controller", "controller", "EmailRequest")
 		os.Exit(1)

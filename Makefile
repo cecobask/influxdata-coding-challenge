@@ -161,3 +161,11 @@ $(CONTROLLER_GEN): $(LOCALBIN)
 envtest: $(ENVTEST) ## Download envtest-setup locally if necessary.
 $(ENVTEST): $(LOCALBIN)
 	test -s $(LOCALBIN)/setup-envtest || GOBIN=$(LOCALBIN) go install sigs.k8s.io/controller-runtime/tools/setup-envtest@latest
+
+.PHONY: import-email-requests
+import-email-requests: ## Transform the entries from a CSV file to EmailRequest CRs and import them into the current namespace of a cluster.
+	bash hack/import_email_requests.sh
+
+.PHONY: cleanup-email-requests
+cleanup-email-requests: ## Delete all EmailRequest CRs from the current namespace of a cluster.
+	kubectl delete emailrequests --all --wait=false
